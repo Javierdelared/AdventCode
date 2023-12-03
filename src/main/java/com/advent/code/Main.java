@@ -9,5 +9,6 @@ public class Main {
         puzzle3();
         puzzle4();
         puzzle5();
+        puzzle6();
     }
 }

@@ -25,6 +25,7 @@ public class StringOperator {
     private final static Pattern patternGame = Pattern.compile("Game ([0-9]*): ");
     private final static Pattern patternNumbers = Pattern.compile("[0-9]+");
     private final static Pattern patternNotDigitsOrPoints = Pattern.compile("(?!([0-9]|\\.)).");
+    private final static Pattern patternAsterisk = Pattern.compile("\\*");
     public static Map<String, String> NUMBERS = Map.of("one", "1", "two", "2",
             "three", "3", "four", "4", "five", "5", "six", "6",
             "seven", "7", "eight", "8", "nine", "9");
@@ -102,5 +103,14 @@ public class StringOperator {
             symbolPositions.add(new Position(matcher.start(), lineNumber));
         }
         return symbolPositions;
+    }
+
+    public static List<Position> getGearPositions(int lineNumber, String line) {
+        Matcher matcher = patternAsterisk.matcher(line);
+        List<Position> gearPositions = new ArrayList<>();
+        while (matcher.find()) {
+            gearPositions.add(new Position(matcher.start(), lineNumber));
+        }
+        return gearPositions;
     }
 }

@@ -1,8 +1,6 @@
 package com.advent.code.dto;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class Position {
 
@@ -22,6 +20,18 @@ public class Position {
             }
         }
         return positions;
+    }
+
+    public List<Integer> getAdjacentNumbers(List<NumberLocation> numberLocations) {
+        List<Integer> adjacentNumbers = new ArrayList<>();
+        Set<Position> adjacentPositions = getAdjacentPositions();
+        for (NumberLocation numberLocation : numberLocations) {
+            boolean areAdjacent = adjacentPositions.stream().anyMatch(numberLocation.getPositions()::contains);
+            if (areAdjacent) {
+                adjacentNumbers.add(numberLocation.getNumberValue());
+            }
+        }
+        return adjacentNumbers;
     }
 
     @Override

@@ -22,6 +22,10 @@ public class NumberLocation {
         return numberValue;
     }
 
+    public List<Position> getPositions() {
+        return positions;
+    }
+
     public boolean hasAdjacent(List<Position> symbolPositions) {
         Set<Position> adjacentPositions = positions.stream().
                 flatMap(p -> p.getAdjacentPositions().stream())

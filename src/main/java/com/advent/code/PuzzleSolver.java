@@ -58,4 +58,20 @@ public class PuzzleSolver {
                 .mapToInt(NumberLocation::getNumberValue).sum();
         LOGGER.info("Result puzzle 5: {}", result);
     }
+
+    public static void puzzle6() {
+        List<String> lines = FileReader.lineReader("advent_file_3.txt");
+        List<Position> gearsPositions = new ArrayList<>();
+        List<NumberLocation> numberLocationList = new ArrayList<>();
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            gearsPositions.addAll(StringOperator.getGearPositions(i, line));
+            numberLocationList.addAll(StringOperator.getNumbersLocations(i, line));
+        }
+        int result = gearsPositions.stream()
+                .map(g -> g.getAdjacentNumbers(numberLocationList))
+                .filter(l -> l.size() == 2)
+                .mapToInt(l -> l.get(0) * l.get(1)).sum();
+        LOGGER.info("Result puzzle 6: {}", result);
+    }
 }
