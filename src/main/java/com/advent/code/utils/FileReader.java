@@ -8,18 +8,17 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileParser {
+public class FileReader {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileParser.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileReader.class);
     public static final String BASE_PATH = "target/classes/";
 
     public static List<String> lineReader(String fileName) {
         List<String> listOfLines = new ArrayList<>();
         BufferedReader bufReader;
         try {
-            bufReader = new BufferedReader(new FileReader(BASE_PATH + fileName));
+            bufReader = new BufferedReader(new java.io.FileReader(BASE_PATH + fileName));
         } catch (FileNotFoundException e) {
-            LOGGER.error("File not found");
             throw new ServiceException("File not found", e);
         }
         String line;
@@ -31,7 +30,6 @@ public class FileParser {
                 LOGGER.debug("Line: {}", line);
             }
         } catch (IOException e) {
-            LOGGER.error("Error reading line");
             throw new ServiceException("Error reading line", e);
         }
         return listOfLines;
