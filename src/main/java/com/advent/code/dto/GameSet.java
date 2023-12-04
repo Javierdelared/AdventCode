@@ -56,7 +56,7 @@ public class GameSet {
             maxGameSet.getBlueCubes() < blueCubes;
     }
 
-    public Integer calculatePower() {
+    public int calculatePower() {
         return redCubes * greenCubes * blueCubes;
     }
 }

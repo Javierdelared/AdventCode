@@ -4,10 +4,10 @@ import java.util.*;
 
 public class Position {
 
-    private final Integer x;
-    private final Integer y;
+    private final int x;
+    private final int y;
 
-    public Position(Integer x, Integer y) {
+    public Position(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -43,7 +43,7 @@ public class Position {
             return false;
         }
         Position position = (Position) o;
-        return Objects.equals(x, position.x) && Objects.equals(y, position.y);
+        return x == position.x && y == position.y;
     }
 
     @Override

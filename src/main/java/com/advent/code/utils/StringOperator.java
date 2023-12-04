@@ -1,9 +1,6 @@
 package com.advent.code.utils;
 
-import com.advent.code.dto.Game;
-import com.advent.code.dto.GameSet;
-import com.advent.code.dto.NumberLocation;
-import com.advent.code.dto.Position;
+import com.advent.code.dto.*;
 import com.advent.code.exception.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class StringOperator {
 
@@ -23,6 +21,7 @@ public class StringOperator {
     private final static Pattern patternDigitsExtended = Pattern.compile("[0-9]|one|two|three|four|five|six|seven|eight|nine");
     private final static Pattern patternDigitsExtendedGreedy = Pattern.compile(".*([0-9]|one|two|three|four|five|six|seven|eight|nine)");
     private final static Pattern patternGame = Pattern.compile("Game ([0-9]*): ");
+    private final static Pattern patternScratchCard = Pattern.compile("Card +([0-9]*):");
     private final static Pattern patternNumbers = Pattern.compile("[0-9]+");
     private final static Pattern patternNotDigitsOrPoints = Pattern.compile("(?!([0-9]|\\.)).");
     private final static Pattern patternAsterisk = Pattern.compile("\\*");
@@ -66,20 +65,17 @@ public class StringOperator {
         Game game = new Game();
         Matcher matcherGame = patternGame.matcher(line);
         if (matcherGame.find()) {
-            Integer gameID = Integer.parseInt(matcherGame.group(1));
+            int gameID = Integer.parseInt(matcherGame.group(1));
             game.setGameID(gameID);
             line = line.replace(matcherGame.group(), "");
         } else {
             throw new ServiceException("Game ID not found");
         }
         List<String> sets = List.of(line.split("; "));
-        for (String s : sets) {
+        for (String set : sets) {
             GameSet gameSet = new GameSet();
-            List<String> colorCubes = List.of(s.split(", "));
-            for (String colorCube : colorCubes) {
-                String[] colorCubeArray = colorCube.split(" ");
-                gameSet.addColour(colorCubeArray[1], Integer.parseInt(colorCubeArray[0]));
-            }
+            Stream.of(set.split(", ")).map(colorCube -> colorCube.split(" "))
+                    .forEach(arr -> gameSet.addColour(arr[1], Integer.parseInt(arr[0])));
             game.addSet(gameSet);
         }
         return game;
@@ -112,5 +108,22 @@ public class StringOperator {
             gearPositions.add(new Position(matcher.start(), lineNumber));
         }
         return gearPositions;
+    }
+
+    public static ScratchCard getScratchCard(String line) {
+        ScratchCard scratchCard = new ScratchCard();
+        Matcher matcherGame = patternScratchCard.matcher(line);
+        if (matcherGame.find()) {
+            int cardId = Integer.parseInt(matcherGame.group(1));
+            scratchCard.setCardId(cardId);
+            line = line.replace(matcherGame.group(), "");
+        } else {
+            throw new ServiceException("Card ID not found");
+        }
+        scratchCard.setWiningNumbers(Stream.of(line.split("\\|")[0].split(" ")).filter(s -> !s.isBlank())
+                .map(Integer::parseInt).toList());
+        scratchCard.setCardNumbers(Stream.of(line.split("\\|")[1].split(" ")).filter(s -> !s.isBlank())
+                .map(Integer::parseInt).toList());
+        return scratchCard;
     }
 }

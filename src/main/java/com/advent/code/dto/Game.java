@@ -5,14 +5,14 @@ import java.util.List;
 
 public class Game {
 
-    private Integer gameID;
+    private int gameID;
     private final List<GameSet> gameSets = new ArrayList<>();
 
-    public Integer getGameID() {
+    public int getGameID() {
         return gameID;
     }
 
-    public void setGameID(Integer gameID) {
+    public void setGameID(int gameID) {
         this.gameID = gameID;
     }
 

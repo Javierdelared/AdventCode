@@ -1,16 +1,14 @@
 package com.advent.code;
 
-import com.advent.code.dto.Game;
-import com.advent.code.dto.GameSet;
-import com.advent.code.dto.NumberLocation;
-import com.advent.code.dto.Position;
+import com.advent.code.dto.*;
 import com.advent.code.utils.FileReader;
 import com.advent.code.utils.StringOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class PuzzleSolver {
 
@@ -48,11 +46,11 @@ public class PuzzleSolver {
         List<String> lines = FileReader.lineReader("advent_file_3.txt");
         List<Position> symbolPositions = new ArrayList<>();
         List<NumberLocation> numberLocationList = new ArrayList<>();
-        for (int i = 0; i < lines.size(); i++) {
+        IntStream.range(0, lines.size()).forEach(i -> {
             String line = lines.get(i);
             symbolPositions.addAll(StringOperator.getSymbolPositions(i, line));
             numberLocationList.addAll(StringOperator.getNumbersLocations(i, line));
-        }
+        });
         int result = numberLocationList.stream()
                 .filter(nl -> nl.hasAdjacent(symbolPositions))
                 .mapToInt(NumberLocation::getNumberValue).sum();
@@ -63,15 +61,32 @@ public class PuzzleSolver {
         List<String> lines = FileReader.lineReader("advent_file_3.txt");
         List<Position> gearsPositions = new ArrayList<>();
         List<NumberLocation> numberLocationList = new ArrayList<>();
-        for (int i = 0; i < lines.size(); i++) {
+        IntStream.range(0, lines.size()).forEach(i -> {
             String line = lines.get(i);
             gearsPositions.addAll(StringOperator.getGearPositions(i, line));
             numberLocationList.addAll(StringOperator.getNumbersLocations(i, line));
-        }
+        });
         int result = gearsPositions.stream()
                 .map(g -> g.getAdjacentNumbers(numberLocationList))
                 .filter(l -> l.size() == 2)
                 .mapToInt(l -> l.get(0) * l.get(1)).sum();
         LOGGER.info("Result puzzle 6: {}", result);
+    }
+
+    public static void puzzle7() {
+        List<String> lines = FileReader.lineReader("advent_file_4.txt");
+        int result = lines.stream().map(StringOperator::getScratchCard).mapToInt(ScratchCard::calculatePoints).sum();
+        LOGGER.info("Result puzzle 7: {}", result);
+    }
+
+    public static void puzzle8() {
+        List<String> lines = FileReader.lineReader("advent_file_4.txt");
+        SortedMap<Integer, ScratchCard> scratchCardMap = lines.stream().map(StringOperator::getScratchCard)
+                .collect(Collectors.toMap(ScratchCard::getCardId, card -> card, (a, b) -> b, TreeMap::new));
+        scratchCardMap.forEach((id, scratchCard) ->
+                IntStream.rangeClosed(id + 1, id + scratchCard.getMatchingNumbers())
+                        .forEach(j -> scratchCardMap.get(j).addCopies(scratchCard.getCopies())));
+        int result = scratchCardMap.values().stream().mapToInt(ScratchCard::getCopies).sum();
+        LOGGER.info("Result puzzle 8: {}", result);
     }
 }
