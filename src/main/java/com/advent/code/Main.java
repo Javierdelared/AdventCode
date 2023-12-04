@@ -4,13 +4,13 @@ import static com.advent.code.PuzzleSolver.*;
 
 public class Main {
     public static void main(String[] args) {
-        puzzle1();
-        puzzle2();
-        puzzle3();
-        puzzle4();
-        puzzle5();
-        puzzle6();
-        puzzle7();
-        puzzle8();
+        puzzle11();
+        puzzle12();
+        puzzle21();
+        puzzle22();
+        puzzle31();
+        puzzle32();
+        puzzle41();
+        puzzle42();
     }
 }
