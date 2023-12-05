@@ -20,8 +20,8 @@ public class StringOperator {
     private final static Pattern patternDigitsGreedy = Pattern.compile(".*([0-9])");
     private final static Pattern patternDigitsExtended = Pattern.compile("[0-9]|one|two|three|four|five|six|seven|eight|nine");
     private final static Pattern patternDigitsExtendedGreedy = Pattern.compile(".*([0-9]|one|two|three|four|five|six|seven|eight|nine)");
-    private final static Pattern patternGame = Pattern.compile("Game ([0-9]*): ");
-    private final static Pattern patternScratchCard = Pattern.compile("Card +([0-9]*):");
+    private final static Pattern patternGame = Pattern.compile("^Game ([0-9]*): ");
+    private final static Pattern patternScratchCard = Pattern.compile("^Card +([0-9]*):");
     private final static Pattern patternNumbers = Pattern.compile("[0-9]+");
     private final static Pattern patternNotDigitsOrPoints = Pattern.compile("(?!([0-9]|\\.)).");
     private final static Pattern patternAsterisk = Pattern.compile("\\*");

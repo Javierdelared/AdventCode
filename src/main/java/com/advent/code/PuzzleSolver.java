@@ -1,6 +1,7 @@
 package com.advent.code;
 
 import com.advent.code.dto.*;
+import com.advent.code.utils.AlmanacUtils;
 import com.advent.code.utils.FileReader;
 import com.advent.code.utils.StringOperator;
 import org.slf4j.Logger;
@@ -89,4 +90,34 @@ public class PuzzleSolver {
         int result = scratchCardMap.values().stream().mapToInt(ScratchCard::getCopies).sum();
         LOGGER.info("Result puzzle 8: {}", result);
     }
+
+    public static void puzzle51() {
+        List<String> lines = FileReader.lineReader("advent_file_5.txt");
+        List<Long> seeds = AlmanacUtils.getSeeds(lines.get(0));
+        Map<String, AlmanacMap> almanacMaps = AlmanacUtils.getAlmanacMaps(lines);
+        String source = "seed";
+        while (!"location".equals(source)) {
+            AlmanacMap currentMap = almanacMaps.get(source);
+            seeds = seeds.stream().map(currentMap::calculateDestination).toList();
+            source = currentMap.getDestination();
+        }
+        long result = Collections.min(seeds);
+        LOGGER.info("Result puzzle 9: {}", result);
+    }
+
+    public static void puzzle52() {
+        List<String> lines = FileReader.lineReader("advent_file_5.txt");
+        Map<String, AlmanacMap> almanacMaps = AlmanacUtils.getAlmanacMaps(lines);
+        AlmanacMap almanacSeeds = AlmanacUtils.getSeedRanges(lines.get(0));
+        List<MapRange> currentMapRanges = almanacSeeds.getMapRanges();
+        String source = "seed";
+        while (!"location".equals(source)) {
+            AlmanacMap newAlmanacMap = almanacMaps.get(source);
+            currentMapRanges = AlmanacUtils.getNewAlmanacMapRanges(currentMapRanges, newAlmanacMap.getMapRanges());
+            source = newAlmanacMap.getDestination();
+        }
+        long result = Collections.min(currentMapRanges.stream().map(MapRange::getDestinationFirstElement).toList());
+        LOGGER.info("Result puzzle 10: {}", result);
+    }
+
 }
