@@ -1,7 +1,7 @@
 package com.advent.code.utils;
 
-import com.advent.code.dto.AlmanacMap;
-import com.advent.code.dto.MapRange;
+import com.advent.code.models.AlmanacMap;
+import com.advent.code.models.MapRange;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -30,7 +30,7 @@ public class AlmanacUtils {
     }
 
     public static AlmanacMap getSeedRanges(String line) {
-        List<Long> seedRanges = StringOperator.getLongNumbers(line);
+        List<Long> seedRanges = ParseUtils.parseLongNumbers(line);
         AlmanacMap seedRangeMap = new AlmanacMap("origin", "seed");
         Long start = null;
         for (int i = 0; i < seedRanges.size(); i++) {

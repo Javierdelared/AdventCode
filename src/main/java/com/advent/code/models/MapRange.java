@@ -1,4 +1,4 @@
-package com.advent.code.dto;
+package com.advent.code.models;
 
 public class MapRange {
 

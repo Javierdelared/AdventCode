@@ -1,8 +1,13 @@
-package com.advent.code.dto;
+package com.advent.code.models;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Position {
+
+    private final static Pattern patternNotDigitsOrPoints = Pattern.compile("(?!([0-9]|\\.)).");
+    private final static Pattern patternAsterisk = Pattern.compile("\\*");
 
     private final int x;
     private final int y;
@@ -32,6 +37,24 @@ public class Position {
             }
         }
         return adjacentNumbers;
+    }
+
+    public static List<Position> parseSymbolPositions(int lineNumber, String line) {
+        Matcher matcher = patternNotDigitsOrPoints.matcher(line);
+        List<Position> symbolPositions = new ArrayList<>();
+        while (matcher.find()) {
+            symbolPositions.add(new Position(matcher.start(), lineNumber));
+        }
+        return symbolPositions;
+    }
+
+    public static List<Position> parseGearPositions(int lineNumber, String line) {
+        Matcher matcher = patternAsterisk.matcher(line);
+        List<Position> gearPositions = new ArrayList<>();
+        while (matcher.find()) {
+            gearPositions.add(new Position(matcher.start(), lineNumber));
+        }
+        return gearPositions;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.advent.code.dto;
+package com.advent.code.models;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.advent.code.dto;
+package com.advent.code.models;
 
 import com.advent.code.exception.ServiceException;
 

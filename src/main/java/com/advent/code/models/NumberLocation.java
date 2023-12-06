@@ -1,11 +1,15 @@
-package com.advent.code.dto;
+package com.advent.code.models;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class NumberLocation {
+
+    private final static Pattern patternNumbers = Pattern.compile("[0-9]+");
 
     private final int numberValue;
 
@@ -32,5 +36,16 @@ public class NumberLocation {
                 .collect(Collectors.toSet());
         adjacentPositions.retainAll(symbolPositions);
         return !adjacentPositions.isEmpty();
+    }
+
+    public static List<NumberLocation> parseNumbersLocations(int lineNumber, String line) {
+        Matcher matcher = patternNumbers.matcher(line);
+        List<NumberLocation> numberLocationList = new ArrayList<>();
+        while (matcher.find()) {
+            NumberLocation numberLocation = new NumberLocation(Integer.parseInt(matcher.group()),
+                    matcher.start(), lineNumber, matcher.group().length());
+            numberLocationList.add(numberLocation);
+        }
+        return numberLocationList;
     }
 }

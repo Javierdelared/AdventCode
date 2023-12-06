@@ -1,9 +1,9 @@
-package com.advent.code;
+package com.advent.code.puzzles;
 
-import com.advent.code.dto.*;
+import com.advent.code.models.*;
 import com.advent.code.utils.AlmanacUtils;
 import com.advent.code.utils.FileReader;
-import com.advent.code.utils.StringOperator;
+import com.advent.code.utils.ParseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,89 +11,97 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class PuzzleSolver {
+public class PuzzleSolver1 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PuzzleSolver.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PuzzleSolver1.class);
 
-    public static void puzzle11() {
+    public static int puzzle11() {
         List<String> lines = FileReader.lineReader("advent_file_1.txt");
-        int result = lines.stream().mapToInt(StringOperator::getCalibrationValue).sum();
+        int result = lines.stream().mapToInt(ParseUtils::parseCalibrationValue).sum();
         LOGGER.info("Result puzzle 1: {}", result);
+        return result;
     }
 
-    public static void puzzle12() {
+    public static int puzzle12() {
         List<String> lines = FileReader.lineReader("advent_file_1.txt");
-        int result = lines.stream().mapToInt(StringOperator::getCalibrationValueExtended).sum();
+        int result = lines.stream().mapToInt(ParseUtils::parseCalibrationValueExtended).sum();
         LOGGER.info("Result puzzle 2: {}", result);
+        return result;
     }
 
-    public static void puzzle21() {
+    public static int puzzle21() {
         GameSet maxGameSet = new GameSet(12, 13, 14);
         List<String> lines = FileReader.lineReader("advent_file_2.txt");
-        int result = lines.stream().map(StringOperator::getGame)
+        int result = lines.stream().map(Game::parseGame)
                 .filter(game -> game.isValidGame(maxGameSet))
                 .mapToInt(Game::getGameID).sum();
         LOGGER.info("Result puzzle 3: {}", result);
+        return result;
     }
 
-    public static void puzzle22() {
+    public static int puzzle22() {
         List<String> lines = FileReader.lineReader("advent_file_2.txt");
-        int result = lines.stream().map(StringOperator::getGame)
+        int result = lines.stream().map(Game::parseGame)
                 .mapToInt(Game::calculateMinimumSetPower).sum();
         LOGGER.info("Result puzzle 4: {}", result);
+        return result;
     }
 
-    public static void puzzle31() {
+    public static int puzzle31() {
         List<String> lines = FileReader.lineReader("advent_file_3.txt");
         List<Position> symbolPositions = new ArrayList<>();
         List<NumberLocation> numberLocationList = new ArrayList<>();
         IntStream.range(0, lines.size()).forEach(i -> {
             String line = lines.get(i);
-            symbolPositions.addAll(StringOperator.getSymbolPositions(i, line));
-            numberLocationList.addAll(StringOperator.getNumbersLocations(i, line));
+            symbolPositions.addAll(Position.parseSymbolPositions(i, line));
+            numberLocationList.addAll(NumberLocation.parseNumbersLocations(i, line));
         });
         int result = numberLocationList.stream()
                 .filter(nl -> nl.hasAdjacent(symbolPositions))
                 .mapToInt(NumberLocation::getNumberValue).sum();
         LOGGER.info("Result puzzle 5: {}", result);
+        return result;
     }
 
-    public static void puzzle32() {
+    public static int puzzle32() {
         List<String> lines = FileReader.lineReader("advent_file_3.txt");
         List<Position> gearsPositions = new ArrayList<>();
         List<NumberLocation> numberLocationList = new ArrayList<>();
         IntStream.range(0, lines.size()).forEach(i -> {
             String line = lines.get(i);
-            gearsPositions.addAll(StringOperator.getGearPositions(i, line));
-            numberLocationList.addAll(StringOperator.getNumbersLocations(i, line));
+            gearsPositions.addAll(Position.parseGearPositions(i, line));
+            numberLocationList.addAll(NumberLocation.parseNumbersLocations(i, line));
         });
         int result = gearsPositions.stream()
                 .map(g -> g.getAdjacentNumbers(numberLocationList))
                 .filter(l -> l.size() == 2)
                 .mapToInt(l -> l.get(0) * l.get(1)).sum();
         LOGGER.info("Result puzzle 6: {}", result);
+        return result;
     }
 
-    public static void puzzle41() {
+    public static int puzzle41() {
         List<String> lines = FileReader.lineReader("advent_file_4.txt");
-        int result = lines.stream().map(StringOperator::getScratchCard).mapToInt(ScratchCard::calculatePoints).sum();
+        int result = lines.stream().map(ScratchCard::parseScratchCard).mapToInt(ScratchCard::calculatePoints).sum();
         LOGGER.info("Result puzzle 7: {}", result);
+        return result;
     }
 
-    public static void puzzle42() {
+    public static int puzzle42() {
         List<String> lines = FileReader.lineReader("advent_file_4.txt");
-        SortedMap<Integer, ScratchCard> scratchCardMap = lines.stream().map(StringOperator::getScratchCard)
+        SortedMap<Integer, ScratchCard> scratchCardMap = lines.stream().map(ScratchCard::parseScratchCard)
                 .collect(Collectors.toMap(ScratchCard::getCardId, card -> card, (a, b) -> b, TreeMap::new));
         scratchCardMap.forEach((id, scratchCard) ->
                 IntStream.rangeClosed(id + 1, id + scratchCard.getMatchingNumbers())
                         .forEach(j -> scratchCardMap.get(j).addCopies(scratchCard.getCopies())));
         int result = scratchCardMap.values().stream().mapToInt(ScratchCard::getCopies).sum();
         LOGGER.info("Result puzzle 8: {}", result);
+        return result;
     }
 
-    public static void puzzle51() {
+    public static long puzzle51() {
         List<String> lines = FileReader.lineReader("advent_file_5.txt");
-        List<Long> seeds = StringOperator.getLongNumbers(lines.get(0));
+        List<Long> seeds = ParseUtils.parseLongNumbers(lines.get(0));
         Map<String, AlmanacMap> almanacMaps = AlmanacUtils.getAlmanacMaps(lines);
         String source = "seed";
         while (!"location".equals(source)) {
@@ -103,9 +111,10 @@ public class PuzzleSolver {
         }
         long result = Collections.min(seeds);
         LOGGER.info("Result puzzle 9: {}", result);
+        return result;
     }
 
-    public static void puzzle52() {
+    public static long puzzle52() {
         List<String> lines = FileReader.lineReader("advent_file_5.txt");
         Map<String, AlmanacMap> almanacMaps = AlmanacUtils.getAlmanacMaps(lines);
         AlmanacMap almanacSeeds = AlmanacUtils.getSeedRanges(lines.get(0));
@@ -118,20 +127,7 @@ public class PuzzleSolver {
         }
         long result = Collections.min(currentMapRanges.stream().map(MapRange::getDestinationFirstElement).toList());
         LOGGER.info("Result puzzle 10: {}", result);
-    }
-
-    public static void puzzle61() {
-        List<String> lines = FileReader.lineReader("advent_file_6.txt");
-        List<Race> races = StringOperator.getRaces(lines);
-        long result = races.stream().map(Race::calculatePossibleTimes).reduce(1L, (a, b) -> a * b);
-        LOGGER.info("Result puzzle 11: {}", result);
-    }
-
-    public static void puzzle62() {
-        List<String> lines = FileReader.lineReader("advent_file_6.txt");
-        Race race = StringOperator.getRace(lines);
-        long result = race.calculatePossibleTimes();
-        LOGGER.info("Result puzzle 12: {}", result);
+        return result;
     }
 
 }
