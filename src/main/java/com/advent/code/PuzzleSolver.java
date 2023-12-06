@@ -93,7 +93,7 @@ public class PuzzleSolver {
 
     public static void puzzle51() {
         List<String> lines = FileReader.lineReader("advent_file_5.txt");
-        List<Long> seeds = AlmanacUtils.getSeeds(lines.get(0));
+        List<Long> seeds = StringOperator.getLongNumbers(lines.get(0));
         Map<String, AlmanacMap> almanacMaps = AlmanacUtils.getAlmanacMaps(lines);
         String source = "seed";
         while (!"location".equals(source)) {
@@ -118,6 +118,20 @@ public class PuzzleSolver {
         }
         long result = Collections.min(currentMapRanges.stream().map(MapRange::getDestinationFirstElement).toList());
         LOGGER.info("Result puzzle 10: {}", result);
+    }
+
+    public static void puzzle61() {
+        List<String> lines = FileReader.lineReader("advent_file_6.txt");
+        List<Race> races = StringOperator.getRaces(lines);
+        long result = races.stream().map(Race::calculatePossibleTimes).reduce(1L, (a, b) -> a * b);
+        LOGGER.info("Result puzzle 11: {}", result);
+    }
+
+    public static void puzzle62() {
+        List<String> lines = FileReader.lineReader("advent_file_6.txt");
+        Race race = StringOperator.getRace(lines);
+        long result = race.calculatePossibleTimes();
+        LOGGER.info("Result puzzle 12: {}", result);
     }
 
 }

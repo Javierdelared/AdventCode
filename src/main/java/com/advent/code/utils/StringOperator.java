@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StringOperator {
@@ -101,6 +102,16 @@ public class StringOperator {
         return symbolPositions;
     }
 
+    public static List<Long> getLongNumbers(String line) {
+        return Stream.of(line.split(" ")).filter(s -> s.matches("[0-9]+"))
+                .map(Long::parseLong).toList();
+    }
+
+    public static Long getLongNumber(String line) {
+        return Long.parseLong(Stream.of(line.split(" ")).filter(s -> s.matches("[0-9]+"))
+                .collect(Collectors.joining("")));
+    }
+
     public static List<Position> getGearPositions(int lineNumber, String line) {
         Matcher matcher = patternAsterisk.matcher(line);
         List<Position> gearPositions = new ArrayList<>();
@@ -125,5 +136,19 @@ public class StringOperator {
         scratchCard.setCardNumbers(Stream.of(line.split("\\|")[1].split(" ")).filter(s -> !s.isBlank())
                 .map(Integer::parseInt).toList());
         return scratchCard;
+    }
+
+    public static List<Race> getRaces(List<String> lines) {
+        List<Race> races = new ArrayList<>();
+        List<Long> times = getLongNumbers(lines.get(0));
+        List<Long> distances = getLongNumbers(lines.get(1));
+        for (int i = 0; i < times.size(); i++) {
+            races.add(new Race(times.get(i), distances.get(i)));
+        }
+        return races;
+    }
+
+    public static Race getRace(List<String> lines) {
+        return new Race(getLongNumber(lines.get(0)), getLongNumber(lines.get(1)));
     }
 }

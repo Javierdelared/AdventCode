@@ -6,7 +6,6 @@ import com.advent.code.dto.MapRange;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class AlmanacUtils {
     private final static Pattern patternThreeNumbers = Pattern.compile("^([0-9]+) ([0-9]+) ([0-9]+)$");
@@ -30,13 +29,8 @@ public class AlmanacUtils {
         return almanacMaps;
     }
 
-    public static List<Long> getSeeds(String line) {
-        return Stream.of(line.split(" ")).filter(s -> s.matches("[0-9]+"))
-                .map(Long::parseLong).toList();
-    }
-
     public static AlmanacMap getSeedRanges(String line) {
-        List<Long> seedRanges = getSeeds(line);
+        List<Long> seedRanges = StringOperator.getLongNumbers(line);
         AlmanacMap seedRangeMap = new AlmanacMap("origin", "seed");
         Long start = null;
         for (int i = 0; i < seedRanges.size(); i++) {
