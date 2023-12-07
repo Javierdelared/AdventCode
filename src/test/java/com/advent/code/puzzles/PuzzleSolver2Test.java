@@ -29,4 +29,14 @@ class PuzzleSolver2Test {
     void testPuzzle62() {
         assertEquals(36992486, puzzleSolver.puzzle62());
     }
+
+    @Test
+    void testPuzzle71() {
+        assertEquals(251927063, puzzleSolver.puzzle71());
+    }
+
+    @Test
+    void testPuzzle72() {
+        assertEquals(255632664, puzzleSolver.puzzle72());
+    }
 }

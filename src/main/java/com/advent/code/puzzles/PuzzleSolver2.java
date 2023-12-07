@@ -32,4 +32,29 @@ public class PuzzleSolver2 {
         return result;
     }
 
+    public long puzzle71() {
+        List<String> lines = lineReader.readLines("advent_file_7.txt");
+        List<CamelHand> hands = new ArrayList<>(lines.stream().map(l -> CamelHand.parseCamelHand(l, false)).toList());
+        Collections.sort(hands);
+        int rank = 1;
+        long result = 0;
+        for(CamelHand hand : hands) {
+            result += rank++ * hand.getBet();
+        }
+        LOGGER.info("Result puzzle 13: {}", result);
+        return result;
+    }
+
+    public long puzzle72() {
+        List<String> lines = lineReader.readLines("advent_file_7.txt");
+        List<CamelHand> hands = new ArrayList<>(lines.stream().map(l -> CamelHand.parseCamelHand(l, true)).toList());
+        Collections.sort(hands);
+        int rank = 1;
+        long result = 0;
+        for (CamelHand hand : hands) {
+            result += rank++ * hand.getBet();
+        }
+        LOGGER.info("Result puzzle 14: {}", result);
+        return result;
+    }
 }
