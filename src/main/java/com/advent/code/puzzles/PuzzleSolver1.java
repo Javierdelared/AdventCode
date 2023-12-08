@@ -7,23 +7,21 @@ import com.advent.code.utils.LineReader;
 import com.advent.code.utils.ParseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Component
 public class PuzzleSolver1 {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PuzzleSolver1.class);
 
     private final LineReader lineReader;
 
-    public PuzzleSolver1(LineReader lineReader) {
-        this.lineReader = lineReader;
+    public PuzzleSolver1(String basePath) {
+        this.lineReader = new LineReader(basePath);
     }
-
 
     public int puzzle11() {
         List<String> lines = lineReader.readLines("advent_file_1.txt");
@@ -100,7 +98,7 @@ public class PuzzleSolver1 {
     public int puzzle42() {
         List<String> lines = lineReader.readLines("advent_file_4.txt");
         SortedMap<Integer, ScratchCard> scratchCardMap = lines.stream().map(ScratchCard::parseScratchCard)
-                .collect(Collectors.toMap(ScratchCard::getCardId, card -> card, (a, b) -> b, TreeMap::new));
+                .collect(Collectors.toMap(ScratchCard::getCardId, Function.identity(), (a, b) -> b, TreeMap::new));
         scratchCardMap.forEach((id, scratchCard) ->
                 IntStream.rangeClosed(id + 1, id + scratchCard.getMatchingNumbers())
                         .forEach(j -> scratchCardMap.get(j).addCopies(scratchCard.getCopies())));

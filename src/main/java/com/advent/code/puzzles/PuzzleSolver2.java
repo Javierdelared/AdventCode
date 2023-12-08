@@ -2,18 +2,20 @@ package com.advent.code.puzzles;
 
 import com.advent.code.models.*;
 import com.advent.code.utils.LineReader;
+import com.advent.code.utils.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PuzzleSolver2 {
     private static final Logger LOGGER = LoggerFactory.getLogger(PuzzleSolver2.class);
 
     private final LineReader lineReader;
 
-    public PuzzleSolver2(LineReader lineReader) {
-        this.lineReader = lineReader;
+    public PuzzleSolver2(String basePath) {
+        this.lineReader = new LineReader(basePath);
     }
 
     public long puzzle61() {
@@ -56,5 +58,53 @@ public class PuzzleSolver2 {
         }
         LOGGER.info("Result puzzle 14: {}", result);
         return result;
+    }
+
+    public int puzzle81() {
+        List<String> lines = lineReader.readLines("advent_file_8.txt");
+        String directions = lines.get(0);
+        int directionsLength = directions.length();
+        Map<String, DirectionNode> directionNodes = lines.stream().map(DirectionNode::parseDirectionNode)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toMap(DirectionNode::getOrigin, dn -> dn, (a, b) -> b, TreeMap::new));
+        String currentPosition = "AAA";
+        int step = 0;
+        while (!"ZZZ".equals(currentPosition)) {
+            char direction = directions.charAt(step % directionsLength);
+            currentPosition = directionNodes.get(currentPosition).getNewPosition(direction);
+            step++;
+        }
+        LOGGER.info("Result puzzle 15: {}", step);
+        return step;
+    }
+
+    public long puzzle82() {
+        List<String> lines = lineReader.readLines("advent_file_8.txt");
+        String directions = lines.get(0);
+        List<DirectionNode> directionNodes = lines.stream().map(DirectionNode::parseDirectionNode)
+                .filter(Objects::nonNull).toList();
+        List<DirectionNode> startingPositions = directionNodes.stream()
+                .filter(x -> x.getOrigin().matches(".{2}A")).toList();
+        List<DirectionNodeMatchLoop> startingPositionMatches = startingPositions.stream()
+                .map(sp -> new DirectionNodeMatchLoop(sp.getOrigin(), directions, directionNodes, ".{2}Z"))
+                .toList();
+        long step = 0;
+        // Trick to avoid brute force for particular case of perfect loops.
+        if (startingPositionMatches.stream().allMatch(DirectionNodeMatchLoop::isPerfectLoop)) {
+            step = MathUtils.lcm(startingPositionMatches.stream()
+                    .mapToLong(DirectionNodeMatchLoop::getPerfectLoopSize));
+        } else {
+            DirectionNodeMatchLoop firstDirectionNodeMatchLoop = startingPositionMatches.get(0);
+            int i = 0;
+            boolean conditionIsReached = false;
+            while (!conditionIsReached) {
+                step = firstDirectionNodeMatchLoop.findPosition(i);
+                final long stepFinal = step;
+                conditionIsReached = startingPositionMatches.stream().allMatch(sp -> sp.isValidPosition(stepFinal));
+                i++;
+            }
+        }
+        LOGGER.info("Result puzzle 16: {}", step);
+        return step;
     }
 }
