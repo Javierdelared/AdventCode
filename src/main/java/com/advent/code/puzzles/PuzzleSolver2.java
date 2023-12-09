@@ -94,7 +94,7 @@ public class PuzzleSolver2 {
         // Trick to avoid brute force for particular case of perfect loops.
         if (startingPositionMatches.stream().allMatch(DirectionNodeMatchLoop::isPerfectLoop)) {
             step = MathUtils.lcm(startingPositionMatches.stream()
-                    .mapToLong(DirectionNodeMatchLoop::getPerfectLoopSize));
+                    .map(DirectionNodeMatchLoop::getPerfectLoopSize).toList());
         } else {
             DirectionNodeMatchLoop firstDirectionNodeMatchLoop = startingPositionMatches.get(0);
             int i = 0;

@@ -16,7 +16,7 @@ class PuzzleSolver2Test {
 
     @BeforeAll
     static void setup() {
-        puzzleSolver = new PuzzleSolver2("src/test/data");
+        puzzleSolver = new PuzzleSolver2("src/main/resources");
         puzzleSolverExamplesPart1 = new PuzzleSolver2("src/test/examples/part1");
         puzzleSolverExamplesPart2 = new PuzzleSolver2("src/test/examples/part2");
     }
