@@ -3,6 +3,8 @@ package com.advent.code.puzzles;
 import com.advent.code.models.*;
 import com.advent.code.utils.LineReader;
 import com.advent.code.utils.MathUtils;
+import com.advent.code.utils.ParseUtils;
+import com.advent.code.utils.SequenceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,5 +108,21 @@ public class PuzzleSolver2 {
         }
         LOGGER.info("Result puzzle 16: {}", step);
         return step;
+    }
+
+    public long puzzle91() {
+        List<String> lines = lineReader.readLines("advent_file_9.txt");
+        long result = lines.stream().mapToLong(l ->
+                SequenceUtils.calculateNext(ParseUtils.parseLongNumbers(l))).sum();
+        LOGGER.info("Result puzzle 17: {}", result);
+        return result;
+    }
+
+    public long puzzle92() {
+        List<String> lines = lineReader.readLines("advent_file_9.txt");
+        long result = lines.stream().mapToLong(l ->
+                SequenceUtils.calculatePrevious(ParseUtils.parseLongNumbers(l))).sum();
+        LOGGER.info("Result puzzle 18: {}", result);
+        return result;
     }
 }

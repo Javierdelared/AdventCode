@@ -14,8 +14,8 @@ class ParseUtilsTest {
     @Test
     void parseLongNumbers() {
         // Given
-        String line = "asdas3d 3242 34g 98635  7 gt 88 !  56,7 33.21";
-        List<Long> expectedResult = List.of(3242L, 98635L, 7L, 88L);
+        String line = "asdas3d 3242 34g 98635  7 gt 88 !  56,7 33.21 -54 5-4";
+        List<Long> expectedResult = List.of(3242L, 98635L, 7L, 88L, -54L);
         // When then
         assertEquals(expectedResult, ParseUtils.parseLongNumbers(line));
     }
