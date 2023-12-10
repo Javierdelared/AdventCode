@@ -125,4 +125,33 @@ public class PuzzleSolver2 {
         LOGGER.info("Result puzzle 18: {}", result);
         return result;
     }
+
+    public int puzzle101() {
+        List<String> lines = lineReader.readLines("advent_file_10.txt");
+        List<PipePosition> pipePositions = new ArrayList<>();
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            pipePositions.addAll(PipePosition.parseMazePositions(line, i));
+        }
+        PipeMaze pipeMaze = new PipeMaze(pipePositions);
+        int result = pipeMaze.getLoopCoordinates().size() / 2;
+        LOGGER.info("Result puzzle 19: {}", result);
+        return result;
+    }
+
+    public long puzzle102() {
+        List<String> lines = lineReader.readLines("advent_file_10.txt");
+        List<PipePosition> pipePositions = new ArrayList<>();
+        for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
+            pipePositions.addAll(PipePosition.parseMazePositions(line, i));
+        }
+        PipeMaze pipeMaze = new PipeMaze(pipePositions);
+        Coordinates knownOutsideCoordinates = new Coordinates(-1, -1);
+        PipeMaze.Group insideGroup = pipeMaze.findGroup(knownOutsideCoordinates).reverse();
+        long result = pipeMaze.getMazeMatrixMap().keySet().stream()
+                .filter(c -> insideGroup.equals(pipeMaze.findGroup(c))).count();
+        LOGGER.info("Result puzzle 20: {}", result);
+        return result;
+    }
 }
