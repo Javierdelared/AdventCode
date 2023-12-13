@@ -36,4 +36,18 @@ public class PuzzleSolver3 {
         LOGGER.info("Result puzzle 22: {}", distance);
         return distance;
     }
+
+    public long puzzle121() {
+        List<String> lines = lineReader.readLines("advent_file_12.txt");
+        long combinations = lines.stream().map(SpringRow::new).mapToLong(SpringRow::countCombinations).sum();
+        LOGGER.info("Result puzzle 23: {}", combinations);
+        return combinations;
+    }
+    public long puzzle122() {
+        List<String> lines = lineReader.readLines("advent_file_12.txt");
+        long combinations = lines.stream().map(SpringRow::new)
+                .mapToLong(r -> r.countUnfoldedCombinations(5)).sum();
+        LOGGER.info("Result puzzle 24: {}", combinations);
+        return combinations;
+    }
 }
