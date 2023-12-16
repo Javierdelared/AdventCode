@@ -124,8 +124,7 @@ public class PuzzleSolver3 {
         int result = 0;
         for (Map.Entry<RockPositionList, Long> loopPoint : tiltedRockPlatform.getLoopCycleMap().entrySet()) {
             if ((1000000000 - loopPoint.getValue()) % tiltedRockPlatform.getLoopSize() == 0) {
-                result = TiltedRockPlatform.calculateLoad(Direction.NORTH, tiltedRockPlatform.getMaxCoordinates(),
-                        loopPoint.getKey());
+                result = loopPoint.getKey().calculateLoad(Direction.NORTH, tiltedRockPlatform.getMaxC());
             }
         }
         LOGGER.info("Result puzzle 28: {}", result);

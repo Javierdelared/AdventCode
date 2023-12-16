@@ -8,15 +8,15 @@ import static com.advent.code.models.Direction.*;
 public class TiltedRockPlatform {
     private final RockPositionList fixedRockCoordinates;
     private RockPositionList rollingRockCoordinates;
-    private final Coordinates maxCoordinates;
+    private final Coordinates maxC;
     private Map<Direction, Map<Coordinates, Coordinates>> rollingRockMaxCoordinatesMap;
     private final Map<Direction, Map<RockPositionList, RockPositionList>> rollingRockCoordinatesCache = new HashMap<>();
     private boolean loopFound;
     private final Map<RockPositionList, Long> loopCycleMap = new HashMap<>();
     private int loopSize;
 
-    public Coordinates getMaxCoordinates() {
-        return maxCoordinates;
+    public Coordinates getMaxC() {
+        return maxC;
     }
 
     public boolean isLoopFound() {
@@ -32,64 +32,27 @@ public class TiltedRockPlatform {
     }
 
     public TiltedRockPlatform(List<Coordinates> fixedRockCoordinates, List<Coordinates> rollingRockCoordinates,
-                              Coordinates maxCoordinates) {
+                              Coordinates maxC) {
         this.fixedRockCoordinates = new RockPositionList(fixedRockCoordinates);
         this.rollingRockCoordinates = new RockPositionList(rollingRockCoordinates);
-        this.maxCoordinates = maxCoordinates;
+        this.maxC = maxC;
         Arrays.stream(Direction.values()).forEach(d -> rollingRockCoordinatesCache.put(d, new HashMap<>()));
     }
 
-    private Map<Direction, Map<Coordinates, Coordinates>> getRollingMaxCoordinatesMap() {
-        if (rollingRockMaxCoordinatesMap == null) {
-            rollingRockMaxCoordinatesMap = calculateRollingMaxCoordinatesMap();
-        }
-        return rollingRockMaxCoordinatesMap;
+    public int calculateCurrentLoad(Direction d) {
+        return rollingRockCoordinates.calculateLoad(d, maxC);
     }
 
-    private Map<Direction, Map<Coordinates, Coordinates>> calculateRollingMaxCoordinatesMap() {
-        Map<Direction, Map<Coordinates, Coordinates>> rollingMaxValueDirectionMap = new HashMap<>();
-        Arrays.stream(values()).forEach(direction -> {
-            Map<Coordinates, Coordinates> rollingMapValueMap = new HashMap<>();
-            IntStream.range(0, maxCoordinates.x()).forEach(x ->
-                IntStream.range(0, maxCoordinates.y()).forEach(y ->
-                    rollingMapValueMap.put(new Coordinates(x, y), calculateMaxCoordinates(x, y, direction))));
-            rollingMaxValueDirectionMap.put(direction, rollingMapValueMap);
-        });
-        return rollingMaxValueDirectionMap;
-    }
-
-    private Coordinates calculateMaxCoordinates(int x, int y, Direction direction) {
-        OptionalInt fixedRock = fixedRockCoordinates.getFixedRock(direction, x, y);
-        return switch (direction) {
-            case NORTH -> new Coordinates(x, fixedRock.isPresent() ? fixedRock.getAsInt() + 1 : 0);
-            case WEST -> new Coordinates(fixedRock.isPresent() ? fixedRock.getAsInt() + 1 : 0, y);
-            case SOUTH -> new Coordinates(x,  fixedRock.isPresent() ? fixedRock.getAsInt() - 1 : maxCoordinates.y() - 1);
-            case EAST -> new Coordinates(fixedRock.isPresent() ? fixedRock.getAsInt() - 1 : maxCoordinates.x() - 1, y);
-        };
-    }
-
-    public void tilt(Direction direction, long cycle) {
-        if (rollingRockCoordinatesCache.get(direction).get(rollingRockCoordinates) != null) {
-            rollingRockCoordinates = rollingRockCoordinatesCache.get(direction).get(rollingRockCoordinates);
-            if (direction == EAST) {
+    public void tilt(Direction d, long cycle) {
+        if (rollingRockCoordinatesCache.get(d).get(rollingRockCoordinates) != null) {
+            rollingRockCoordinates = rollingRockCoordinatesCache.get(d).get(rollingRockCoordinates);
+            if (d == EAST) {
                 updateLoopCache(cycle);
             }
             return ;
         }
-        List<Coordinates> newCoordinatesList = new ArrayList<>();
-        IntStream.range(0, maxCoordinates.x()).forEach(x ->
-            IntStream.range(0, maxCoordinates.y())
-                .mapToObj(y -> new Coordinates(x, y))
-                .filter(c -> rollingRockCoordinates.contains(c))
-                .forEach(c -> {
-                    Coordinates newCoordinates = getRollingMaxCoordinatesMap().get(direction).get(c);
-                    while (newCoordinatesList.contains(newCoordinates)) {
-                        newCoordinates = newCoordinates.move(direction.getOpposite());
-                    }
-                    newCoordinatesList.add(newCoordinates);
-                }));
-        RockPositionList newRockPositionList = new RockPositionList(newCoordinatesList);
-        rollingRockCoordinatesCache.get(direction).put(rollingRockCoordinates, newRockPositionList);
+        RockPositionList newRockPositionList = calculateNewRockPositions(d);
+        rollingRockCoordinatesCache.get(d).put(rollingRockCoordinates, newRockPositionList);
         rollingRockCoordinates = newRockPositionList;
     }
 
@@ -104,25 +67,63 @@ public class TiltedRockPlatform {
         }
     }
 
-    public int calculateCurrentLoad(Direction direction) {
-        return calculateLoad(direction, maxCoordinates, rollingRockCoordinates);
+    private RockPositionList calculateNewRockPositions(Direction d) {
+        List<Coordinates> newCoordinates = new ArrayList<>();
+        IntStream.range(0, maxC.x()).forEach(x ->
+            IntStream.range(0, maxC.y())
+                .mapToObj(y -> new Coordinates(x, y))
+                .filter(c -> rollingRockCoordinates.contains(c))
+                .forEach(c -> {
+                    Coordinates newC = getRollingMaxCoordinatesMap().get(d).get(c);
+                    while (newCoordinates.contains(newC)) {
+                        newC = newC.move(d.getOpposite());
+                    }
+                    newCoordinates.add(newC);
+                }));
+        return new RockPositionList(newCoordinates);
     }
 
-    public static int calculateLoad(Direction direction, Coordinates maxCoordinates,
-                                    RockPositionList rollingRockCoordinates) {
-        return IntStream.range(0, maxCoordinates.x()).map(x ->
-                    IntStream.range(0, maxCoordinates.y())
-                        .mapToObj(y -> new Coordinates(x, y))
-                        .filter(rollingRockCoordinates::contains)
-                        .mapToInt(c -> calculateRollingRockLoad(direction, c, maxCoordinates)).sum()).sum();
+    private Map<Direction, Map<Coordinates, Coordinates>> getRollingMaxCoordinatesMap() {
+        if (rollingRockMaxCoordinatesMap == null) {
+            rollingRockMaxCoordinatesMap = calculateRollingMaxCoordinatesMap();
+        }
+        return rollingRockMaxCoordinatesMap;
     }
 
-    private static int calculateRollingRockLoad(Direction d, Coordinates coordinates, Coordinates maxCoordinates) {
+    private Map<Direction, Map<Coordinates, Coordinates>> calculateRollingMaxCoordinatesMap() {
+        Map<Direction, Map<Coordinates, Coordinates>> rollingMaxValueDirectionMap = new HashMap<>();
+        Arrays.stream(values()).forEach(d -> {
+            Map<Coordinates, Coordinates> rollingMapValueMap = new HashMap<>();
+            IntStream.range(0, maxC.x()).forEach(x ->
+                    IntStream.range(0, maxC.y()).mapToObj(y -> new Coordinates(x, y)).forEach(c ->
+                            rollingMapValueMap.put(c, calculateMaxCoordinates(c, maxC, d))));
+            rollingMaxValueDirectionMap.put(d, rollingMapValueMap);
+        });
+        return rollingMaxValueDirectionMap;
+    }
+
+    private Coordinates calculateMaxCoordinates(Coordinates c1, Coordinates maxC, Direction d) {
         return switch (d) {
-            case NORTH -> maxCoordinates.y() - coordinates.y();
-            case WEST -> maxCoordinates.x() - coordinates.x();
-            case SOUTH -> coordinates.y() + 1;
-            case EAST -> coordinates.x() + 1;
+            case NORTH -> {
+                OptionalInt maxRock = fixedRockCoordinates.coordinatesList().stream()
+                        .filter(c -> c.x() == c1.x() && c.y() < c1.y()).mapToInt(Coordinates::y).max();
+                yield new Coordinates(c1.x(), maxRock.isPresent() ? maxRock.getAsInt() + 1 : 0);
+            }
+            case WEST -> {
+                OptionalInt maxRock = fixedRockCoordinates.coordinatesList().stream()
+                        .filter(c -> c.x() < c1.x() && c.y() == c1.y()).mapToInt(Coordinates::x).max();
+                yield new Coordinates(maxRock.isPresent() ? maxRock.getAsInt() + 1 : 0, c1.y());
+            }
+            case SOUTH -> {
+                OptionalInt maxRock = fixedRockCoordinates.coordinatesList().stream()
+                        .filter(c -> c.x() == c1.x() && c.y() > c1.y()).mapToInt(Coordinates::y).min();
+                yield new Coordinates(c1.x(),  maxRock.isPresent() ? maxRock.getAsInt() - 1 : maxC.y() - 1);
+            }
+            case EAST -> {
+                OptionalInt maxRock = fixedRockCoordinates.coordinatesList().stream()
+                        .filter(c -> c.x() > c1.x() && c.y() == c1.y()).mapToInt(Coordinates::x).min();
+                yield new Coordinates(maxRock.isPresent() ? maxRock.getAsInt() - 1 : maxC.x() - 1, c1.y());
+            }
         };
     }
 }
