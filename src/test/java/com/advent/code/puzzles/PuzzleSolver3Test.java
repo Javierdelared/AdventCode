@@ -85,4 +85,20 @@ class PuzzleSolver3Test {
     void testPuzzleExample142() {
         assertEquals(64, puzzleSolverExamplesPart2.puzzle142());
     }
+    @Test
+    void testPuzzle151() {
+        assertEquals(513214, puzzleSolver.puzzle151());
+    }
+    @Test
+    void testPuzzleExample151() {
+        assertEquals(1320, puzzleSolverExamplesPart1.puzzle151());
+    }
+    @Test
+    void testPuzzle152() {
+        assertEquals(258826, puzzleSolver.puzzle152());
+    }
+    @Test
+    void testPuzzleExample152() {
+        assertEquals(145, puzzleSolverExamplesPart2.puzzle152());
+    }
 }

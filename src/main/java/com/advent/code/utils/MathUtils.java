@@ -22,4 +22,14 @@ public class MathUtils {
                 (long) Math.pow(pf, pfList.stream().mapToInt(pw ->
                         pw.getOrDefault(pf, 0)).max().orElse(0))).reduce(1L, (a, b) -> a * b);
     }
+
+    public static int calculateHash(String s) {
+        int hash = 0;
+        for (int i = 0; i <s.length(); i++) {
+            hash += s.charAt(i);
+            hash *= 17;
+            hash = hash % 256;
+        }
+        return hash;
+    }
 }
