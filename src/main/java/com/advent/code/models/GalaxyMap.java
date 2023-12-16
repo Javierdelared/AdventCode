@@ -52,8 +52,4 @@ public class GalaxyMap {
         }
         return true;
     }
-
-    public static List<Boolean> parseGalaxyPositions(String line) {
-        return line.chars().mapToObj(c -> (char) c == '#').toList();
-    }
 }

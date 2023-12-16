@@ -45,7 +45,6 @@ class PuzzleSolver3Test {
     void testPuzzleExample121() {
         assertEquals(21, puzzleSolverExamplesPart1.puzzle121());
     }
-
     @Test
     void testPuzzle122() {
         assertEquals(10153896718999L, puzzleSolver.puzzle122());
@@ -53,5 +52,37 @@ class PuzzleSolver3Test {
     @Test
     void testPuzzleExample122() {
         assertEquals(525152, puzzleSolverExamplesPart2.puzzle122());
+    }
+    @Test
+    void testPuzzle131() {
+        assertEquals(37718, puzzleSolver.puzzle131());
+    }
+    @Test
+    void testPuzzleExample131() {
+        assertEquals(405, puzzleSolverExamplesPart1.puzzle131());
+    }
+    @Test
+    void testPuzzle132() {
+        assertEquals(40995, puzzleSolver.puzzle132());
+    }
+    @Test
+    void testPuzzleExample132() {
+        assertEquals(400, puzzleSolverExamplesPart2.puzzle132());
+    }
+    @Test
+    void testPuzzle141() {
+        assertEquals(109665, puzzleSolver.puzzle141());
+    }
+    @Test
+    void testPuzzleExample141() {
+        assertEquals(136, puzzleSolverExamplesPart1.puzzle141());
+    }
+    @Test
+    void testPuzzle142() {
+        assertEquals(96061, puzzleSolver.puzzle142());
+    }
+    @Test
+    void testPuzzleExample142() {
+        assertEquals(64, puzzleSolverExamplesPart2.puzzle142());
     }
 }

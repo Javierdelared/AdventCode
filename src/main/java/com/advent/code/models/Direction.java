@@ -1,7 +1,7 @@
 package com.advent.code.models;
 
 public enum Direction {
-    NORTH, EAST, SOUTH, WEST;
+    NORTH, WEST, SOUTH, EAST;
 
     public Direction getOpposite() {
         return switch (this) {
