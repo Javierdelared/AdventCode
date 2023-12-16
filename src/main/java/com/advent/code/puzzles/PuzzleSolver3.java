@@ -2,21 +2,15 @@ package com.advent.code.puzzles;
 
 import com.advent.code.exception.ServiceException;
 import com.advent.code.models.*;
-import com.advent.code.utils.LineReader;
 import com.advent.code.utils.MathUtils;
 import com.advent.code.utils.ParseUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public class PuzzleSolver3 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PuzzleSolver3.class);
-
-    private final LineReader lineReader;
+public class PuzzleSolver3 extends PuzzleSolver {
 
     public PuzzleSolver3(String basePath) {
-        this.lineReader = new LineReader(basePath);
+        super(basePath);
     }
 
     public long puzzle111() {

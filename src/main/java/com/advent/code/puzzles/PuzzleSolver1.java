@@ -3,24 +3,17 @@ package com.advent.code.puzzles;
 import com.advent.code.models.*;
 import com.advent.code.utils.AlmanacUtils;
 import com.advent.code.utils.CalibrationUtils;
-import com.advent.code.utils.LineReader;
 import com.advent.code.utils.ParseUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class PuzzleSolver1 {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(PuzzleSolver1.class);
-
-    private final LineReader lineReader;
+public class PuzzleSolver1 extends PuzzleSolver {
 
     public PuzzleSolver1(String basePath) {
-        this.lineReader = new LineReader(basePath);
+        super(basePath);
     }
 
     public int puzzle11() {
