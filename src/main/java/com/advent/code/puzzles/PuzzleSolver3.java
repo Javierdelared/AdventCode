@@ -99,7 +99,7 @@ public class PuzzleSolver3 {
             rollingRockPositions.addAll(ParseUtils.parseLineToCoordinates(line, y, 'O'));
         }
         TiltedRockPlatform tiltedRockPlatform = new TiltedRockPlatform(fixedRockPositions, rollingRockPositions,
-                new Coordinates(lines.get(0).length(), lines.size()));
+                Coordinates.getMaxCoordinates(lines));
         tiltedRockPlatform.tilt(Direction.NORTH, 0);
         int result = tiltedRockPlatform.calculateCurrentLoad(Direction.NORTH);
         LOGGER.info("Result puzzle 27: {}", result);
@@ -116,7 +116,7 @@ public class PuzzleSolver3 {
             rollingRockPositions.addAll(ParseUtils.parseLineToCoordinates(line, y, 'O'));
         }
         TiltedRockPlatform tiltedRockPlatform = new TiltedRockPlatform(fixedRockPositions, rollingRockPositions,
-                new Coordinates(lines.get(0).length(), lines.size()));
+                Coordinates.getMaxCoordinates(lines));
         long cycle = 1;
         while (!tiltedRockPlatform.isLoopFound()) {
             final long finalCycle = cycle;

@@ -1,8 +1,13 @@
 package com.advent.code.models;
 
+import java.util.List;
+
 import static com.advent.code.models.Direction.*;
 
 public record Coordinates(int x, int y) {
+
+    public static final Coordinates ORIGIN = new Coordinates(0,0);
+
     public Coordinates move(Direction d) {
         return switch (d) {
             case NORTH -> new Coordinates(x, y - 1);
@@ -13,17 +18,24 @@ public record Coordinates(int x, int y) {
     }
 
     public int calculateDistance(Coordinates d) {
-        return Math.abs(x - d.x()) + Math.abs(y - d.y());
+        return Math.abs(x - d.x) + Math.abs(y - d.y);
     }
 
     public Direction approachEastWest(Coordinates c2) {
-        return x - c2.x() > 0 ? WEST : EAST;
+        return x - c2.x > 0 ? WEST : EAST;
     }
 
     public Direction approachNorthSouth(Coordinates c2) {
-        return y - c2.y() > 0 ? NORTH : SOUTH;
+        return y - c2.y > 0 ? NORTH : SOUTH;
     }
 
+    public boolean isInRange(Coordinates c1, Coordinates c2) {
+        return x >= c1.y && x < c2.x && y >= c1.y && y < c2.y;
+    }
+
+    public static Coordinates getMaxCoordinates(List<String> lines) {
+        return new Coordinates(lines.get(0).length(), lines.size());
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) {
