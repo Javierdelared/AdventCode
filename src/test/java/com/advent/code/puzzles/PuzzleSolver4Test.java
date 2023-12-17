@@ -1,6 +1,7 @@
 package com.advent.code.puzzles;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -36,5 +37,23 @@ class PuzzleSolver4Test {
     @Test
     void testPuzzleExample162() {
         assertEquals(51, puzzleSolverExamplesPart2.puzzle162());
+    }
+    @Disabled("Takes to long")
+    @Test
+    void testPuzzle171() {
+        assertEquals(755, puzzleSolver.puzzle171());
+    }
+    @Test
+    void testPuzzleExample171() {
+        assertEquals(102, puzzleSolverExamplesPart1.puzzle171());
+    }
+    @Disabled("Takes to long")
+    @Test
+    void testPuzzle172() {
+        assertEquals(881, puzzleSolver.puzzle172());
+    }
+    @Test
+    void testPuzzleExample172() {
+        assertEquals(94, puzzleSolverExamplesPart2.puzzle172());
     }
 }

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 public class PuzzleSolver4 extends PuzzleSolver {
 
@@ -24,7 +25,7 @@ public class PuzzleSolver4 extends PuzzleSolver {
                         mirrorPositions.put(c, m)));
         }
         MirrorContraption mirrorContraption = new MirrorContraption(mirrorPositions, Coordinates.getMaxCoordinates(lines));
-        mirrorContraption.sendLight(new Vector(Coordinates.ORIGIN, Direction.EAST));
+        mirrorContraption.sendLight(new Vector(Coordinates.ORIGIN, Direction.EAST, 1));
         int result = mirrorContraption.getNumberEnergisedTiles();
         LOGGER.info("Result puzzle 31: {}", result);
         return result;
@@ -46,6 +47,29 @@ public class PuzzleSolver4 extends PuzzleSolver {
                     return mirrorContraption.getNumberEnergisedTiles();
                 }).max().orElse(0);
         LOGGER.info("Result puzzle 31: {}", result);
+        return result;
+    }
+
+    public int puzzle171() {
+        List<String> lines = lineReader.readLines("advent_file_17.txt");
+        Map<Coordinates, Integer> map = new HashMap<>();
+        IntStream.range(0, lines.size()).mapToObj(y -> ParseUtils.parseLineToCoordinatesAndIntegerMap(lines.get(y), y))
+                .forEach(map::putAll);
+        HeatMap heatMap = new HeatMap(map, 1,3, Coordinates.ORIGIN,
+                Coordinates.getBottomRightCoordinates(lines));
+        int result = heatMap.calculateMinHeat();
+        LOGGER.info("Result puzzle 31: {}", result);
+        return result;
+    }
+
+    public int puzzle172() {
+        List<String> lines = lineReader.readLines("advent_file_17.txt");
+        Map<Coordinates, Integer> map = new HashMap<>();
+        IntStream.range(0, lines.size()).mapToObj(y -> ParseUtils.parseLineToCoordinatesAndIntegerMap(lines.get(y), y))
+                .forEach(map::putAll);
+        HeatMap heatMap = new HeatMap(map, 4,10, Coordinates.ORIGIN, Coordinates.getBottomRightCoordinates(lines));
+        int result = heatMap.calculateMinHeat();
+        LOGGER.info("Result puzzle 32: {}", result);
         return result;
     }
 }

@@ -1,11 +1,11 @@
 package com.advent.code.puzzles;
 
-import com.advent.code.exception.ServiceException;
 import com.advent.code.models.*;
-import com.advent.code.utils.MathUtils;
 import com.advent.code.utils.ParseUtils;
 
 import java.util.*;
+import java.util.List;
+import java.util.stream.IntStream;
 
 public class PuzzleSolver3 extends PuzzleSolver {
 
@@ -130,7 +130,7 @@ public class PuzzleSolver3 extends PuzzleSolver {
     public int puzzle151() {
         List<String> lines = lineReader.readLines("advent_file_15.txt");
         List<String> steps = lines.stream().flatMap(l -> Arrays.stream(l.split(","))).toList();
-        int result = steps.stream().mapToInt(MathUtils::calculateHash).sum();
+        int result = steps.stream().mapToInt(Lens::calculateHash).sum();
         LOGGER.info("Result puzzle 29: {}", result);
         return result;
     }
@@ -139,25 +139,15 @@ public class PuzzleSolver3 extends PuzzleSolver {
         List<String> lines = lineReader.readLines("advent_file_15.txt");
         List<String> steps = lines.stream().flatMap(l -> Arrays.stream(l.split(","))).toList();
         Map<Integer, Box> boxes = new HashMap<>();
-        for (String step : steps) {
-            if (step.contains("-")) {
-                String label = step.substring(0, step.length() - 1);
-                int hash = MathUtils.calculateHash(label);
-                if (boxes.get(hash) != null) {
-                    boxes.get(hash).removeLens(new Lens(label, null));
-                }
-            } else if (step.contains("=")) {
-                String label = step.split("=")[0];
-                int focus = Integer.parseInt(step.split("=")[1]);
-                int hash = MathUtils.calculateHash(label);
-                if (boxes.get(hash) == null) {
-                    boxes.put(hash, new Box(hash));
-                }
-                boxes.get(hash).addLens(new Lens(label, focus));
+        IntStream.range(0, 256).forEach(hash -> boxes.put(hash, new Box(hash)));
+        steps.stream().map(Lens::parseLens).forEach(lens -> {
+            Box box = boxes.get(lens.hashCode());
+            if (lens.focus() == null) {
+                box.removeLens(lens);
             } else {
-                throw new ServiceException("Step operation unknown");
+                box.addLens(lens);
             }
-        }
+        });
         int result = boxes.values().stream().mapToInt(Box::calculateBoxFocusPower).sum();
         LOGGER.info("Result puzzle 30: {}", result);
         return result;

@@ -9,11 +9,15 @@ public record Coordinates(int x, int y) {
     public static final Coordinates ORIGIN = new Coordinates(0,0);
 
     public Coordinates move(Direction d) {
+        return move(d, 1);
+    }
+
+    public Coordinates move(Direction d, int speed) {
         return switch (d) {
-            case NORTH -> new Coordinates(x, y - 1);
-            case EAST -> new Coordinates(x + 1, y);
-            case SOUTH -> new Coordinates(x, y + 1);
-            case WEST -> new Coordinates(x - 1, y);
+            case NORTH -> new Coordinates(x, y - speed);
+            case EAST -> new Coordinates(x + speed, y);
+            case SOUTH -> new Coordinates(x, y + speed);
+            case WEST -> new Coordinates(x - speed, y);
         };
     }
 
@@ -36,6 +40,11 @@ public record Coordinates(int x, int y) {
     public static Coordinates getMaxCoordinates(List<String> lines) {
         return new Coordinates(lines.get(0).length(), lines.size());
     }
+
+    public static Coordinates getBottomRightCoordinates(List<String> lines) {
+        return new Coordinates(lines.get(0).length() - 1, lines.size() - 1);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
