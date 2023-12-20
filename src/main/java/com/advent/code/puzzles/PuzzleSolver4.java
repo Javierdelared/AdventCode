@@ -72,4 +72,22 @@ public class PuzzleSolver4 extends PuzzleSolver {
         LOGGER.info("Result puzzle 32: {}", result);
         return result;
     }
+
+    public long puzzle181() {
+        List<String> lines = lineReader.readLines("advent_file_18.txt");
+        LavaPit lavaPit = new LavaPit();
+        lavaPit.parseBorders(lines);
+        long result = lavaPit.calculateArea();
+        LOGGER.info("Result puzzle 33: {}", result);
+        return result;
+    }
+
+    public long puzzle182() {
+        List<String> lines = lineReader.readLines("advent_file_18.txt");
+        LavaPit lavaPit = new LavaPit();
+        lavaPit.parseBordersColours(lines);
+        long result = lavaPit.calculateArea();
+        LOGGER.info("Result puzzle 34: {}", result);
+        return result;
+    }
 }

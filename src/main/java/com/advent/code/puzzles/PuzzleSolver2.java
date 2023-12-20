@@ -142,7 +142,7 @@ public class PuzzleSolver2 extends PuzzleSolver {
         }
         PipeMaze pipeMaze = new PipeMaze(pipePositions);
         Coordinates knownOutsideCoordinates = new Coordinates(-1, -1);
-        PipeMaze.Group insideGroup = pipeMaze.findGroup(knownOutsideCoordinates).reverse();
+        Group insideGroup = pipeMaze.findGroup(knownOutsideCoordinates).reverse();
         long result = pipeMaze.getMazeMatrixMap().keySet().stream()
                 .filter(c -> insideGroup.equals(pipeMaze.findGroup(c))).count();
         LOGGER.info("Result puzzle 20: {}", result);

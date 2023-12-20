@@ -56,4 +56,21 @@ class PuzzleSolver4Test {
     void testPuzzleExample172() {
         assertEquals(94, puzzleSolverExamplesPart2.puzzle172());
     }
+    @Test
+    void testPuzzle181() {
+        assertEquals(49061, puzzleSolver.puzzle181());
+    }
+    @Test
+    void testPuzzleExample181() {
+        assertEquals(62, puzzleSolverExamplesPart1.puzzle181());
+    }
+    @Test
+    void testPuzzle182() {
+        assertEquals(92556825427032L, puzzleSolver.puzzle182());
+    }
+    @Test
+    void testPuzzleExample182() {
+        assertEquals(952408144115L, puzzleSolverExamplesPart2.puzzle182());
+    }
+
 }

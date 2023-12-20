@@ -110,7 +110,7 @@ public class PipeMaze {
 
     public Group findGroup(Coordinates c) {
         if (getLoopCoordinates().contains(c)) {
-            return Group.PIPE;
+            return Group.LIMIT;
         }
         PipeMovement closestPipe = findClosestPipe(c);
         Coordinates pipeC = closestPipe.getMazePosition().getCoordinates();
@@ -128,15 +128,4 @@ public class PipeMaze {
         };
     }
 
-    public enum Group {
-        LEFT_HAND, RIGHT_HAND, PIPE;
-
-        public Group reverse() {
-            return switch (this) {
-                case LEFT_HAND -> RIGHT_HAND;
-                case RIGHT_HAND -> LEFT_HAND;
-                default -> throw new ServiceException("Cannot reverse group");
-            };
-        }
-    }
 }
