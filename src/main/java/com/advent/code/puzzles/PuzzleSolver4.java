@@ -1,12 +1,10 @@
 package com.advent.code.puzzles;
 
 import com.advent.code.models.*;
+import com.advent.code.models.Vector;
 import com.advent.code.utils.ParseUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class PuzzleSolver4 extends PuzzleSolver {
@@ -88,6 +86,35 @@ public class PuzzleSolver4 extends PuzzleSolver {
         lavaPit.parseBordersColours(lines);
         long result = lavaPit.calculateArea();
         LOGGER.info("Result puzzle 34: {}", result);
+        return result;
+    }
+
+    public long puzzle191() {
+        List<String> lines = lineReader.readLines("advent_file_19.txt");
+        List<MachinePart> machineParts = new ArrayList<>();
+        MachinePartWorkFlowMap machinePartWorkFlow = new MachinePartWorkFlowMap();
+        lines.stream().filter(line -> !line.equals("")).forEach(line -> {
+            if (line.charAt(0) == '{') {
+                machineParts.add(MachinePart.parseMachinePart(line));
+            } else {
+                machinePartWorkFlow.add(MachinePartWorkFlow.parseWorkflow(line));
+            }
+        });
+        int result = machineParts.stream().filter(m -> machinePartWorkFlow.executeWorkflow(m, "in") != null)
+                .mapToInt(MachinePart::calculateTotalRating).sum();
+        LOGGER.info("Result puzzle 35: {}", result);
+        return result;
+    }
+
+    public long puzzle192() {
+        List<String> lines = lineReader.readLines("advent_file_19.txt");
+        MachinePartWorkFlowMap machinePartWorkFlowMap = new MachinePartWorkFlowMap();
+        lines.stream().filter(line -> !line.equals("") && !(line.charAt(0) == '{'))
+                .map(MachinePartWorkFlow::parseWorkflow).forEach(machinePartWorkFlowMap::add);
+        List<MachinePartRange> ranges = machinePartWorkFlowMap.executeWorkflowRange(
+                List.of(MachinePartRange.FULL_RANGE), "in");
+        long result = ranges.stream().mapToLong(MachinePartRange::calculateRangeCombinations).sum();
+        LOGGER.info("Result puzzle 36: {}", result);
         return result;
     }
 }
